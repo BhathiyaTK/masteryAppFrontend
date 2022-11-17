@@ -1,0 +1,124 @@
+<div class="update-form-div">
+    <div class="alert alert-success alert-dismissible text-left" *ngIf="successAlert">
+        <i class="material-icons float-left mr-2">check_circle</i> <strong>Details Updated
+            Succesfully.</strong><br>Refresh the webpage
+        to see changes.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible text-left" *ngIf="errorAlert">
+        <i class="material-icons float-left">cancel</i>
+        {{errorText}}<br><small>Please try again shortly.</small>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="mb-3 py-2 text-center" role="status" *ngIf="pendingAlert">
+        <img src="../../../assets/images/loaders/spin_sm.gif" alt="loading spinner sm">
+        <small class="ml-2 text-muted">Updating... Please wait.</small>
+    </div>
+    <form (ngSubmit)="updatePersonalInfo(userUpdateForm)" #userUpdateForm="ngForm">
+        <div class="div-content">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label">First Name:</label>
+                        <input type="text" name="fName" id="fName" placeholder="First Name" class="form-control"
+                            [(ngModel)]="fName" required>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label">Last Name:</label>
+                        <input type="text" name="lName" id="lName" placeholder="First Name" class="form-control"
+                            [(ngModel)]="lName" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Address:</label>
+                <input type="text" name="address" id="address" placeholder="First Name" class="form-control"
+                    [(ngModel)]="address" required>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label">City:</label>
+                        <input type="text" name="city" id="city" placeholder="First Name" class="form-control"
+                            [(ngModel)]="city" required>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="isTeacher">
+                    <div class="form-group">
+                        <label class="form-label">Mobile No:</label>
+                        <input type="text" name="t_mobile" id="t_mobile" placeholder="First Name" class="form-control"
+                            [(ngModel)]="t_mobile" required>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="isStudent">
+                    <div class="form-group">
+                        <label class="form-label">Your Contact No:</label>
+                        <input type="text" name="s_mobile" id="s_mobile" placeholder="First Name" class="form-control"
+                            [(ngModel)]="s_mobile" required>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="isStudent">
+                    <div class="form-group">
+                        <label class="form-label">Gardian's Contact No:</label>
+                        <input type="text" name="g_mobile" id="g_mobile" placeholder="First Name" class="form-control"
+                            [(ngModel)]="g_mobile" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="isStudent">
+                    <label class="form-label">Grade:</label>
+                    <select name="s_grade" id="s_grade" class="form-control" [(ngModel)]="s_grade" required>
+                        <option value="">- Choose -</option>
+                        <option *ngFor="let gradeItem of gradeList" value="{{gradeItem.value}}" [selected]="s_grade">
+                            {{gradeItem.name}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6" *ngIf="isTeacher">
+                    <label class="form-label">Grade:</label>
+                    <select name="t_grade" id="t_grade" class="form-control" [(ngModel)]="t_grade" required>
+                        <option value="">- Choose -</option>
+                        <option value="1 - 5" [selected]="t_grade">1 - 5</option>
+                        <option value="6 - 10" [selected]="t_grade">6 - 10</option>
+                        <option value="10 - 11" [selected]="t_grade">10 - 11</option>
+                        <option value="12 - 13" [selected]="t_grade">12 - 13</option>
+                    </select>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                    <label class="form-label">Medium:</label>
+                    <select name="medium" id="medium" class="form-control" [(ngModel)]="medium" required>
+                        <option value="">- Choose -</option>
+                        <option value="Sinhala" [selected]="medium">සිංහල</option>
+                        <option value="English" [selected]="medium">English</option>
+                        <option value="Tamil" [selected]="medium">தமிழ்</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="isTeacher">
+                <label class="form-label">Educational Qualifications:</label>
+                <textarea name="eduQual" id="eduQual"
+                    placeholder="Educational Status - Use comma(,) to seperate each Degree(s) and Diploma(s)"
+                    class="form-control" [(ngModel)]="eduQual" required></textarea>
+            </div>
+            <div class="form-group" *ngIf="isTeacher">
+                <label class="form-label">Self Introduction:</label>
+                <textarea name="teacherIntro" id="teacherIntro" cols="30" rows="4" maxlength="500"
+                    placeholder="Brief introduction about yourself..." class="form-control" [(ngModel)]="teacherIntro"
+                    required></textarea>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="textarea-limit-indicator text-muted">Maximum 255 characters only</small>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4 mb-2">
+            <button type="submit" class="theme-btn">Update</button>
+        </div>
+    </form>
+</div>
